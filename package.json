@@ -48,5 +48,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cyberconnecthq/cyber-app-sdk.git"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1"
   }
 }
