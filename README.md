@@ -12,7 +12,7 @@ npm install cyber-app-sdk
 
 ### Connect to CyberWallet
 
-```javascript
+```typescript
 import { CyberApp } from "@cyberlab/cyber-app-sdk";
 
 const app = new CyberApp({ name: "testapp" });
@@ -27,12 +27,14 @@ if (connected) {
 
 ### Send a transaction
 
-```javascript
-const res = await app?.cyberWallet
-  ?.sendTransaction({
-    to: address,
-    value: parseUnits("0.0001", 18),
-    data: "0x",
-  })
-  .catch((err: any) => console.log({ err }));
+```typescript
+async function sendTransaction() {
+  const res = await app?.cyberWallet
+    ?.sendTransaction({
+      to: "0x00000000000...",
+      value: parseUnits("0.0001", 18),
+      data: "0x",
+    })
+    .catch((err: any) => console.log({ err }));
+}
 ```
