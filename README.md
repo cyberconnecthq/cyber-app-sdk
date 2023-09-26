@@ -29,10 +29,10 @@ if (connected) {
 
 ```typescript
 async function sendTransaction() {
-  const res = await app?.cyberWallet
-    ?.sendTransaction({
-      to: "0x00000000000...",
-      value: parseUnits("0.0001", 18),
+  const res = await app?.cyberWallet?.optimism
+    .sendTransaction({
+      to: "0x1234134234",
+      value: "0.000000000000000001",
       data: "0x",
     })
     .catch((err: any) => console.log({ err }));
