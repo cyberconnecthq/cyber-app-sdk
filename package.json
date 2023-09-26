@@ -50,7 +50,6 @@
     "url": "https://github.com/cyberconnecthq/cyber-app-sdk.git"
   },
   "dependencies": {
-    "@cyberlab/cyber-app-sdk": "^0.0.0-development",
     "ts-node": "^10.9.1",
     "viem": "^1.8.1"
   }
