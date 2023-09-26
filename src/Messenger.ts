@@ -14,11 +14,16 @@ class Messenger {
   }
 
   public sendMessage(event: WalletEvent) {
+    const messageId = crypto.randomUUID();
+
     this.postMessage({
+      appId: crypto.randomUUID(),
+      messageId,
       target: "CyberWallet",
       event,
-      appId: crypto.randomUUID(),
     });
+
+    return messageId;
   }
 
   public onMessage(callback: (message: WalletMessage) => void) {
