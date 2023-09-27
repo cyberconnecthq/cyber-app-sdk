@@ -7,6 +7,7 @@ export type WalletMessage = {
   target: "CyberWallet" | "CyberApp";
   event: WalletEvent;
   messageId: string;
+  appInfo?: AppInfo;
 };
 
 export enum EventType {
@@ -48,5 +49,10 @@ export type SendTransaction = (
   transaction: WalletTransaction,
   option?: {
     description?: string;
-  }
+  },
 ) => Promise<any>;
+
+export type AppInfo = {
+  name: string;
+  icon: string;
+};

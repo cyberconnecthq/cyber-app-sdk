@@ -1,16 +1,20 @@
 import type { WalletEvent, WalletMessage } from "./types";
+import type { AppInfo } from "./types";
 
 type MessengerParams = {
   walletWindow: Window;
+  appInfo?: AppInfo;
 };
 
 class Messenger {
   public walletWindow: Window;
   public appWindow: Window;
+  public appInfo?: AppInfo;
 
-  constructor({ walletWindow }: MessengerParams) {
+  constructor({ walletWindow, appInfo }: MessengerParams) {
     this.walletWindow = walletWindow;
     this.appWindow = window;
+    this.appInfo = appInfo;
   }
 
   public sendMessage(event: WalletEvent) {
@@ -18,6 +22,7 @@ class Messenger {
 
     this.postMessage({
       appId: crypto.randomUUID(),
+      appInfo: this.appInfo,
       messageId,
       target: "CyberWallet",
       event,

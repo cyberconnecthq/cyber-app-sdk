@@ -4,9 +4,11 @@ import Messenger from "./Messenger";
 import CyberAccount from "./CyberAccount";
 import Chain from "./Chain";
 import { availableChains } from "./config/chains";
+import type { AppInfo } from "./types";
 
 type CyberWalletParams = {
   contextWindow: Window;
+  appInfo: AppInfo;
 };
 
 type AvailableChainName = keyof typeof availableChains;
@@ -31,11 +33,12 @@ class CyberWallet {
   public opBnb: Chain;
   public opBnbTestnet: Chain;
 
-  constructor({ contextWindow }: CyberWalletParams) {
+  constructor({ contextWindow, appInfo }: CyberWalletParams) {
     this.contextWindow = contextWindow;
     this.connected = false;
     this.messenger = new Messenger({
       walletWindow: this.contextWindow,
+      appInfo,
     });
     this.cyberAccount = null;
 
@@ -64,7 +67,7 @@ class CyberWallet {
   private resolveActionResponse(
     message: WalletMessage,
     reject: any,
-    resolve: any
+    resolve: any,
   ) {
     if (message.target === "CyberApp") {
       if (message.event.name === "action") {
@@ -81,7 +84,7 @@ class CyberWallet {
     transaction: WalletTransaction,
     option?: {
       description?: string;
-    }
+    },
   ) {
     this.messenger.sendMessage({
       name: "action",

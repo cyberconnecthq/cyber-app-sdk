@@ -1,18 +1,20 @@
 import CyberWallet from "./CyberWallet";
 import Messenger from "./Messenger";
-
-type CyberAppParams = {
-  name: string;
-};
+import type { AppInfo } from "./types";
 
 class CyberApp {
   public name: string;
   public cyberWallet: CyberWallet;
   public messenger: Messenger;
+  public icon: string;
 
-  constructor({ name }: CyberAppParams) {
+  constructor({ name, icon }: AppInfo) {
     this.name = name;
-    this.cyberWallet = new CyberWallet({ contextWindow: window.parent });
+    this.icon = icon;
+    this.cyberWallet = new CyberWallet({
+      contextWindow: window.parent,
+      appInfo: { name, icon },
+    });
     this.messenger = new Messenger({
       walletWindow: this.cyberWallet.contextWindow,
     });
@@ -34,7 +36,7 @@ class CyberApp {
             if (message.event.data?.data?.result === "success") {
               this.cyberWallet.setConnection(true);
               this.cyberWallet.setCyberAccount(
-                message.event.data?.data?.cyberAccount
+                message.event.data?.data?.cyberAccount,
               );
               resolve({ connected: true });
             } else {
