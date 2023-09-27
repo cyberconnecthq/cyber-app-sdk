@@ -6,8 +6,8 @@
     "skipLibCheck": true,
     "checkJs": true,
     "allowJs": true,
-    // "declaration": true,
-    // "declarationMap": true,
+    "declaration": true,
+    "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     "strictPropertyInitialization": false
   },

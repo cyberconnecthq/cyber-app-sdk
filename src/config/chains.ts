@@ -64,7 +64,23 @@ export const opBnbTestnet = {
   nativeCurrency: bscTestnet.nativeCurrency,
 };
 
-export const availableChains = {
+// This is for TypeScript error: https://github.com/microsoft/TypeScript/issues/42873
+const chainNames = [
+  "optimism",
+  "optimismGoerli",
+  "polygon",
+  "polygonMumbai",
+  "arbitrum",
+  "arbitrumGoerli",
+  "linea",
+  "lineaTestnet",
+  "base",
+  "baseGoerli",
+  "opBnb",
+  "opBnbTestnet",
+] as const;
+
+export const availableChains: Record<(typeof chainNames)[number], Chain> = {
   optimism,
   optimismGoerli,
   polygon,
