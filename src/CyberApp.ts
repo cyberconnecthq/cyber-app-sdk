@@ -1,3 +1,4 @@
+import CyberAccount from "./CyberAccount";
 import CyberWallet from "./CyberWallet";
 import Messenger from "./Messenger";
 import type { AppInfo } from "./types";
@@ -20,8 +21,8 @@ class CyberApp {
     });
   }
 
-  public async start() {
-    return await this.connect();
+  public async start(): Promise<CyberAccount> {
+    return (await this.connect()) as CyberAccount;
   }
 
   public connect() {
@@ -38,7 +39,7 @@ class CyberApp {
               this.cyberWallet.setCyberAccount(
                 message.event.data?.data?.cyberAccount,
               );
-              resolve({ connected: true });
+              resolve(message.event.data?.data?.cyberAccount);
             } else {
               if (message.event.data?.error) {
                 reject(message.event.data?.error);
