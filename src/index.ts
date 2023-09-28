@@ -1,3 +1,2 @@
-export default function () {
-  console.log("Cyber App release testing @v1.0.0");
-}
+export { default as CyberApp } from "./CyberApp";
+export { default as CyberWallet } from "./CyberWallet";
