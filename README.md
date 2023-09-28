@@ -1,35 +1,35 @@
-# Cyber App SDK
+# CyberApp SDK
 
-Create a CyberWallet app easily with Cyber App SDK.
+Create a CyberAccount app easily with CyberApp SDK.
 
 ## Installation
 
 ```bash
-npm install cyber-app-sdk
+npm install @cyberlab/cyber-app-sdk
 ```
 
 ## Getting Started
 
-### Connect to CyberWallet
+### Connect to CyberAccount
 
 ```typescript
 import { CyberApp } from "@cyberlab/cyber-app-sdk";
 
-const app = new CyberApp({ name: "testapp" });
-const { connected } = await app.start();
+const app = new CyberApp({ name: "Your app name", icon: "Your app icon url" });
+const cyberAccount = await app.start();
 
-if (connected) {
-  console.log("Connected to CyberWallet");
+if (cyberAccount) {
+  console.log("Connected to CyberAccount");
 } else {
-  console.log("Connection to CyberWallet failed");
+  console.log("Connection to CyberAccount failed");
 }
 ```
 
-### Send a transaction
+### Send a transaction on Optimism
 
 ```typescript
 async function sendTransaction() {
-  const res = await app?.cyberWallet?.optimism
+  const res = await app?.cyberwallet?.optimism
     .sendTransaction({
       to: "0x1234134234",
       value: "0.000000000000000001",
@@ -38,3 +38,9 @@ async function sendTransaction() {
     .catch((err: any) => console.log({ err }));
 }
 ```
+
+## Run your local app in CyberAccount Sandbox
+
+1. Start your local app server
+2. Go to [CyberAccount Sandbox](http://wallet-sandbox.cyber.co/?_vercel_share=9mH7nlXjAUEU238zCzxJ3fW0TvC2nsX5)
+3. Input your app server url
