@@ -12,6 +12,7 @@ import {
   baseGoerli,
   bsc,
   bscTestnet,
+  scrollSepolia,
 } from "viem/chains";
 
 export const opBnbMainnet = {
@@ -78,6 +79,7 @@ const chainNames = [
   "baseGoerli",
   "opBnb",
   "opBnbTestnet",
+  "scrollSepolia",
 ] as const;
 
 export const availableChains: Record<(typeof chainNames)[number], Chain> = {
@@ -93,4 +95,5 @@ export const availableChains: Record<(typeof chainNames)[number], Chain> = {
   baseGoerli,
   opBnb: opBnbMainnet,
   opBnbTestnet,
+  scrollSepolia,
 } as const;
