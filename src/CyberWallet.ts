@@ -32,6 +32,7 @@ class CyberWallet {
   public baseGoerli: Chain;
   public opBnb: Chain;
   public opBnbTestnet: Chain;
+  public scrollSepolia: Chain;
 
   constructor({ contextWindow, appInfo }: CyberWalletParams) {
     this.contextWindow = contextWindow;
