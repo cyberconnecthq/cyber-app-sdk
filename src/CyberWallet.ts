@@ -4,7 +4,8 @@ import Messenger from "./Messenger";
 import CyberAccount from "./CyberAccount";
 import Chain from "./Chain";
 import { availableChains } from "./config/chains";
-import type { AppInfo } from "./types";
+import { type AppInfo, ErrorType } from "./types";
+import EventError from "./EventError";
 
 type CyberWalletParams = {
   contextWindow: Window;
@@ -73,7 +74,17 @@ class CyberWallet {
     if (message.target === "CyberApp") {
       if (message.event.name === "action") {
         if (message.event.data?.error) {
-          reject(message.event.data.error);
+          if (message.event.data?.method === "sendTransaction") {
+            reject(
+              new EventError({
+                name: ErrorType.SendTransactionError,
+                details: message.event.data.error,
+                shortMessage: "Transaction failed",
+              }),
+            );
+          } else {
+            reject(new EventError({ details: message.event.data.error }));
+          }
         } else {
           resolve(message.event.data?.data);
         }

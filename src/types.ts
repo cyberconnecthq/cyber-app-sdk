@@ -56,3 +56,7 @@ export type AppInfo = {
   name: string;
   icon: string;
 };
+
+export enum ErrorType {
+  SendTransactionError = "SendTransactionError",
+}
