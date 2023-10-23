@@ -68,7 +68,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
     return this.cyberApp.cyberWallet?.[chainKey];
   }
 
-  async request(request: { method: string; params?: any[] }): Promise<any> {
+  async request(request: { method: string; params?: any }): Promise<any> {
     const { method, params = [] } = request;
 
     switch (method) {
