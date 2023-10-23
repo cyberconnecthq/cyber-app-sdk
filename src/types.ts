@@ -63,7 +63,7 @@ export enum ErrorType {
 }
 
 export interface EIP1193Provider extends EventEmitter {
-  request(args: { method: string; params?: any[] }): Promise<unknown>;
+  request(args: { method: string; params?: any[] | unknown }): Promise<unknown>;
 }
 
 export interface EIP1193ProviderError extends Error {
