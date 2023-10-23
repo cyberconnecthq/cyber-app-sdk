@@ -82,7 +82,9 @@ const chainNames = [
   "scrollSepolia",
 ] as const;
 
-export const availableChains: Record<(typeof chainNames)[number], Chain> = {
+export type ChainName = (typeof chainNames)[number];
+
+export const availableChains: Record<ChainName, Chain> = {
   optimism,
   optimismGoerli,
   polygon,

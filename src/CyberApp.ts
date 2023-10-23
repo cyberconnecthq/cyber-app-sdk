@@ -25,18 +25,18 @@ class CyberApp {
     return (await this.connect()) as CyberAccount;
   }
 
-  public connect() {
+  public async connect(): Promise<CyberAccount> {
     this.messenger.sendMessage({
       name: "connect",
     });
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       this.messenger.onMessage((message) => {
         if (message.target === "CyberApp") {
           if (message.event.name === "connect") {
             if (message.event.data?.data?.result === "success") {
-              this.cyberWallet.setConnection(true);
-              this.cyberWallet.setCyberAccount(
+              this.cyberWallet?.setConnection(true);
+              this.cyberWallet?.setCyberAccount(
                 message.event.data?.data?.cyberAccount,
               );
               resolve(message.event.data?.data?.cyberAccount);

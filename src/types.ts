@@ -1,4 +1,5 @@
 import type { Hex } from "viem";
+import { EventEmitter } from "events";
 
 export type WalletEventName = "connect" | "disconnect" | "action";
 
@@ -59,4 +60,13 @@ export type AppInfo = {
 
 export enum ErrorType {
   SendTransactionError = "SendTransactionError",
+}
+
+export interface EIP1193Provider extends EventEmitter {
+  request(args: { method: string; params?: unknown[] }): Promise<unknown>;
+}
+
+export interface EIP1193ProviderError extends Error {
+  code: number;
+  data?: unknown;
 }
