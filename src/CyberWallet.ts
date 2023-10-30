@@ -99,8 +99,10 @@ class CyberWallet {
         type: EventType.Request,
         method: "sendTransaction",
         data: {
-          ...transaction,
-          from: transaction.from || this.cyberAccount?.address,
+          transaction: {
+            ...transaction,
+            from: transaction.from || this.cyberAccount?.address,
+          },
         },
       },
     });
