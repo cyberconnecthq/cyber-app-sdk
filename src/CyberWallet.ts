@@ -92,18 +92,16 @@ class CyberWallet {
     }
   }
 
-  public sendTransaction(
-    transaction: WalletTransaction,
-    option?: {
-      description?: string;
-    },
-  ) {
+  public sendTransaction(transaction: WalletTransaction) {
     this.messenger.sendMessage({
       name: "action",
       data: {
         type: EventType.Request,
         method: "sendTransaction",
-        data: { transaction, option },
+        data: {
+          ...transaction,
+          from: transaction.from || this.cyberAccount?.address,
+        },
       },
     });
 
