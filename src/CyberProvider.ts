@@ -7,6 +7,7 @@ import {
   createPublicClient,
   http,
   type PublicClient,
+  type Hex,
 } from "viem";
 import Chain from "./Chain";
 
@@ -73,10 +74,11 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
 
     switch (method) {
       case "wallet_switchEthereumChain": {
-        this.chainId = params[0].chainId;
-        this.chain = this.getChainByChainId(Number(this.chainId));
-        this.publicClient = this.setPublicClient(Number(this.chainId));
-        this.emit("chainChanged", this.chainId);
+        this.chainId = Number(params[0].chainId as Hex);
+        this.chain = this.getChainByChainId(this.chainId);
+        this.publicClient = this.setPublicClient(this.chainId);
+        // https://eips.ethereum.org/EIPS/eip-1193#chainchanged-1
+        this.emit("chainChanged", params[0].chainId);
         return;
       }
 
