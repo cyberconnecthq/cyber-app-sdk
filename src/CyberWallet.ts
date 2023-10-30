@@ -113,6 +113,22 @@ class CyberWallet {
       });
     });
   }
+
+  public async getAuthToken(): Promise<string> {
+    this.messenger.sendMessage({
+      name: "action",
+      data: {
+        type: EventType.Request,
+        method: "getAuthToken",
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      this.messenger.onMessage((message) => {
+        this.resolveActionResponse(message, reject, resolve);
+      });
+    });
+  }
 }
 
 export default CyberWallet;
