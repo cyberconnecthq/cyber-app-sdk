@@ -4,17 +4,19 @@ import Messenger from "./Messenger";
 import type { AppInfo } from "./types";
 
 class CyberApp {
+  public appId: string;
   public name: string;
   public cyberWallet: CyberWallet;
   public messenger: Messenger;
   public icon: string;
 
-  constructor({ name, icon }: AppInfo) {
+  constructor({ appId, name, icon }: AppInfo) {
+    this.appId = appId;
     this.name = name;
     this.icon = icon;
     this.cyberWallet = new CyberWallet({
       contextWindow: window.parent,
-      appInfo: { name, icon },
+      appInfo: { name, icon, appId },
     });
     this.messenger = new Messenger({
       walletWindow: this.cyberWallet.contextWindow,

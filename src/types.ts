@@ -43,6 +43,7 @@ export type WalletTransaction = {
   ctx: {
     chainId: number;
     owner: Address;
+    appId: string;
   };
 };
 
@@ -54,6 +55,7 @@ export type SendTransaction = (
 ) => Promise<any>;
 
 export type AppInfo = {
+  appId: string;
   name: string;
   icon: string;
 };

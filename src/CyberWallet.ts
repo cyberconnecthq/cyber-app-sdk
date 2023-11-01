@@ -48,6 +48,7 @@ class CyberWallet {
       this[key as AvailableChainName] = new Chain({
         id: chain.id,
         sendTransaction: this.bindedSendTransaction,
+        appId: appInfo.appId,
       });
     });
   }

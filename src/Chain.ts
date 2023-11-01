@@ -6,16 +6,20 @@ class Chain {
   id: number;
   sendTransactionBase: SendTransaction;
   cyberAccount: CyberAccount | null = null;
+  appId: string;
 
   constructor({
     id,
     sendTransaction,
+    appId,
   }: {
     id: number;
     sendTransaction: SendTransaction;
+    appId: string;
   }) {
     this.id = id;
     this.sendTransactionBase = sendTransaction;
+    this.appId = appId;
   }
 
   public setCyberAccount(cyberAccount: CyberAccount | null) {
@@ -24,7 +28,7 @@ class Chain {
 
   public async sendTransaction(
     transaction: Omit<WalletTransaction, "ctx">,
-    option?: { description?: string }
+    option?: { description?: string },
   ) {
     if (!this.cyberAccount) {
       return;
@@ -34,9 +38,13 @@ class Chain {
       {
         ...transaction,
         from: transaction.from || this.cyberAccount.address,
-        ctx: { chainId: this.id, owner: this.cyberAccount.ownerAddress },
+        ctx: {
+          chainId: this.id,
+          owner: this.cyberAccount.ownerAddress,
+          appId: this.appId,
+        },
       },
-      option
+      option,
     );
   }
 }
