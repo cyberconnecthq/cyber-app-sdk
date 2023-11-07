@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "types": "./lib/cjs/types/index.d.ts",
-  "module": "./lib/esm/index.mjs",
+  "module": "./lib/esm/index.js",
   "files": [
     "lib/**/*"
   ],
@@ -12,7 +12,7 @@
     ".": {
       "import": {
         "types": "./lib/esm/types/index.d.ts",
-        "default": "./lib/esm/index.mjs"
+        "default": "./lib/esm/index.js"
       },
       "require": {
         "types": "./lib/cjs/types/index.d.ts",
@@ -24,7 +24,7 @@
     "clean": "rm -rf ./lib",
     "test": "jest",
     "build": "pnpm run test && pnpm run clean && pnpm run build:esm && pnpm run build:cjs",
-    "build:esm": "tsc -p ./tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
+    "build:esm": "tsc -p ./tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.js",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "prepack": "pnpm run build",
     "semantic-release": "semantic-release"
