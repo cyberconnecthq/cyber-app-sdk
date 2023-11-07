@@ -1,3 +1,4 @@
-export const isCyberWallet = ({ testnet }: { testnet?: boolean }) =>
-  document.referrer ===
-  (testnet ? "https://wallet-sandbox.cyber.co/" : "https://wallet.cyber.co/");
+export const isCyberWallet = () =>
+  ["https://wallet-sandbox.cyber.co/", "https://wallet.cyber.co/"].includes(
+    document.referrer,
+  );
