@@ -24,7 +24,7 @@
     "clean": "rm -rf ./lib",
     "test": "jest",
     "build": "pnpm run test && pnpm run clean && pnpm run build:esm && pnpm run build:cjs",
-    "build:esm": "tsc -p ./tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.js",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "prepack": "pnpm run build",
     "semantic-release": "semantic-release"
