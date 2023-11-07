@@ -10,37 +10,84 @@ npm install @cyberlab/cyber-app-sdk
 
 ## Getting Started
 
-### Connect to CyberAccount
+There are two ways to create a CyberApp:
 
-```typescript
-import { CyberApp } from "@cyberlab/cyber-app-sdk";
+1. using `CyberProvider` and `CyberApp` to create a EIP-1193 provider with existing Ethereum libraries like wagmi.
+2. using `CyberApp` directly
 
-const app = new CyberApp({ name: "Your app name", icon: "Your app icon url" });
-const cyberAccount = await app.start();
+Before using the SDK, please go to [Cyber Dev Center](https://dashboard.cyberconnect.me/) to create an APP ID for your app.
 
-if (cyberAccount) {
-  console.log("Connected to CyberAccount");
-} else {
-  console.log("Connection to CyberAccount failed");
+### 1. Using with wagmi
+
+```typescript copy
+import { CyberApp, CyberProvider } from "@cyberlab/cyber-app-sdk";
+import { InjectedConnector } from "wagmi/connectors/injected";
+
+let cyberProvider: CyberProvider | undefined;
+
+if (typeof window !== "undefined") {
+  const app = new CyberApp({
+    appId: "your app id", // required
+    name: "My app", // required
+    icon: "https://icon.com", // required
+  });
+
+  // cyberwallet provider
+  const cyberProvider = new CyberProvider({
+    app: app,
+    chainId: optimismGoerli.id, // default chain ID
+  });
 }
+
+const cyberWalletConnector = new InjectedConnector({
+  chains,
+  options: {
+    name: "CyberWallet",
+    getProvider: () => {
+      return cyberProvider;
+    },
+  },
+});
 ```
 
-### Send a transaction on Optimism
+### 2. Using with CyberApp Directly
 
-```typescript
+#### Connect to CyberWallet
+
+```typescript copy
+import { CyberApp } from "@cyberlab/cyber-app-sdk";
+
+const app = new CyberApp({
+  appId: "your app id", // required
+  name: "My app", // required
+  icon: "https://icon.com", // required
+});
+
+app.start().then((cyberAccount) => {
+  if (cyberAccount) {
+    console.log("Connected to CyberWallet");
+  } else {
+    console.log("Failed to connect to CyberWallet");
+  }
+});
+```
+
+#### Send native tokens on Optimism
+
+```typescript copy
 async function sendTransaction() {
   const res = await app?.cyberwallet?.optimism
     .sendTransaction({
-      to: "0x1234134234",
-      value: "0.000000000000000001",
+      to: "0x370CA01D7314e3EEa59d57E343323bB7e9De24C6",
+      value: "0.01",
       data: "0x",
     })
-    .catch((err: any) => console.log({ err }));
+    .catch((err: Error) => console.log({ err }));
 }
 ```
 
-## Run your local app in CyberAccount Sandbox
+## Run your local app in CyberWallet Sandbox
 
 1. Start your local app server
-2. Go to [CyberAccount Sandbox](http://wallet-sandbox.cyber.co/?_vercel_share=9mH7nlXjAUEU238zCzxJ3fW0TvC2nsX5)
-3. Input your app server url
+2. Go to [CyberWallet Sandbox](http://wallet-sandbox.cyber.co)
+3. Input your app server URL
