@@ -1,4 +1,5 @@
 import {
+  mainnet,
   optimism,
   optimismGoerli,
   type Chain,
@@ -13,6 +14,7 @@ import {
   bsc,
   bscTestnet,
   scrollSepolia,
+  scroll,
 } from "viem/chains";
 
 export const opBnbMainnet = {
@@ -67,6 +69,7 @@ export const opBnbTestnet = {
 
 // This is for TypeScript error: https://github.com/microsoft/TypeScript/issues/42873
 const chainNames = [
+  "mainnet",
   "optimism",
   "optimismGoerli",
   "polygon",
@@ -80,6 +83,7 @@ const chainNames = [
   "opBnb",
   "opBnbTestnet",
   "scrollSepolia",
+  "scroll",
 ] as const;
 
 export type ChainName = (typeof chainNames)[number];
@@ -98,4 +102,6 @@ export const availableChains: Record<ChainName, Chain> = {
   opBnb: opBnbMainnet,
   opBnbTestnet,
   scrollSepolia,
+  scroll,
+  mainnet,
 } as const;
