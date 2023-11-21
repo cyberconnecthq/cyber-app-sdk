@@ -82,8 +82,9 @@ class CyberWalletConnector extends Connector<
       }
 
       // Add shim to storage signalling wallet is connected
-      if (this.options.shimDisconnect)
+      if (this.options.shimDisconnect) {
         this.storage?.setItem(this.shimDisconnectKey, true);
+      }
 
       return { account, chain: { id, unsupported } };
     } catch (error) {
@@ -145,7 +146,7 @@ class CyberWalletConnector extends Connector<
       // cyberwallet provider
       const cyberProvider = new CyberProvider({
         app: app,
-        chainId: optimismGoerli.id, // default chain ID
+        chainId: this.chains[0].id, // default chain ID
       });
 
       this.provider = cyberProvider;
