@@ -13,17 +13,17 @@ import {
 } from "viem";
 import { type Chain, optimismGoerli } from "viem/chains";
 import { isCyberWallet } from "./utils";
-const {
+import {
   Connector,
   ConnectorNotFoundError,
   normalizeChainId,
   ChainNotConfiguredForConnectorError,
-} = require("@wagmi/connectors");
+} from "@wagmi/connectors";
 
 type CyberWalletConnectorOptions = {
-  name: string;
-  icon: string;
-  appId: string;
+  name?: string;
+  icon?: string;
+  appId?: string;
   shimDisconnect?: boolean;
 };
 
@@ -75,8 +75,10 @@ class CyberWalletConnector extends Connector<
       let unsupported = this.isChainUnsupported(id);
       if (chainId && id !== chainId) {
         const chain = await this.switchChain(chainId);
-        id = chain.id;
-        unsupported = this.isChainUnsupported(id);
+        if (chain) {
+          id = chain.id;
+          unsupported = this.isChainUnsupported(id);
+        }
       }
 
       // Add shim to storage signalling wallet is connected
@@ -122,11 +124,7 @@ class CyberWalletConnector extends Connector<
     return provider.request({ method: "eth_chainId" }).then(normalizeChainId);
   }
 
-  getProvider() {
-    if (typeof window === "undefined") {
-      return;
-    }
-
+  async getProvider() {
     const isInCyberWallet = isCyberWallet();
 
     if (!isInCyberWallet) {
@@ -140,8 +138,8 @@ class CyberWalletConnector extends Connector<
 
       const app = new CyberApp({
         appId: this.options.appId,
-        name: this.options.name,
-        icon: this.options.icon,
+        name: this.options.name || "",
+        icon: this.options.icon || "",
       });
 
       // cyberwallet provider
@@ -156,6 +154,7 @@ class CyberWalletConnector extends Connector<
     return this.provider;
   }
 
+  //@ts-ignore
   async getWalletClient({
     chainId,
   }: { chainId?: number } = {}): Promise<WalletClient> {
@@ -200,12 +199,20 @@ class CyberWalletConnector extends Connector<
           params: [{ chainId: id }],
         }),
         new Promise<void>((res) =>
-          this.on("change", ({ chain }: { chain: Chain }) => {
+          this.on("change", ({ chain }) => {
             if (chain?.id === chainId) res();
           })
         ),
       ]);
-      return this.chains.find((x: Chain) => x.id === chainId);
+      return (
+        this.chains.find((x: Chain) => x.id === chainId) ?? {
+          id: chainId,
+          name: `Chain ${id}`,
+          network: `${id}`,
+          nativeCurrency: { name: "Ether", decimals: 18, symbol: "ETH" },
+          rpcUrls: { default: { http: [""] }, public: { http: [""] } },
+        }
+      );
     } catch (error) {
       const chain = this.chains.find((x: Chain) => x.id === chainId);
       if (!chain) {
