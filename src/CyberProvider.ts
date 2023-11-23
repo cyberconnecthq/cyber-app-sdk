@@ -6,6 +6,7 @@ import {
   ProviderDisconnectedError,
   createPublicClient,
   http,
+  hexToString,
   type PublicClient,
   type Hex,
 } from "viem";
@@ -36,7 +37,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
   setPublicClient(chainId: number): PublicClient {
     return createPublicClient({
       chain: Object.values(availableChains).find(
-        (chain) => chain.id === chainId,
+        (chain) => chain.id === chainId
       )!,
       transport: http(),
     });
@@ -54,7 +55,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
 
   private getChainKeyByChainId(chainId: number) {
     const chainObj = Object.entries(availableChains).find(
-      ([_, chain]) => chain.id === chainId,
+      ([_, chain]) => chain.id === chainId
     );
 
     if (!chainObj) {
@@ -81,6 +82,9 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
         this.emit("chainChanged", params[0].chainId);
         return;
       }
+
+      case "personal_sign":
+        return this.cyberApp.cyberWallet?.signMessage(hexToString(params[0]));
 
       case "eth_chainId":
         return `0x${this.chainId.toString(16)}`;
