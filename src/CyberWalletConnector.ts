@@ -19,6 +19,7 @@ import {
   normalizeChainId,
   ChainNotConfiguredForConnectorError,
 } from "@wagmi/connectors";
+import { availableChains } from "./config/chains";
 
 type CyberWalletConnectorOptions = {
   name?: string;
@@ -48,7 +49,14 @@ class CyberWalletConnector extends Connector<
       shimDisconnect: false,
       ...options_,
     };
-    super({ chains, options });
+
+    const chainIds = chains?.map((chain) => chain.id);
+    super({
+      chains: Object.values(availableChains).filter(
+        (chain) => chainIds?.includes(chain.id)
+      ),
+      options,
+    });
     this.id = "cyberwallet";
     this.name = "CyberWallet";
     this.ready = !!this.getProvider();
@@ -234,6 +242,12 @@ class CyberWalletConnector extends Connector<
         account: getAddress(accounts[0] as string),
       });
   };
+
+  public isChainUnsupported(chainId: number) {
+    return !Object.values(availableChains)
+      .map((chain) => chain.id)
+      .includes(chainId);
+  }
 
   protected onChainChanged = (chainId: number | string) => {
     const id = normalizeChainId(chainId);

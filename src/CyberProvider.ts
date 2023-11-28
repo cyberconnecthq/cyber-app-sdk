@@ -21,7 +21,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
     connect?: () => void;
   };
   public chain?: Chain;
-  public publicClient: PublicClient;
+  public publicClient?: PublicClient;
 
   constructor({ app, chainId }: { app: CyberApp; chainId: number }) {
     super();
@@ -34,13 +34,18 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
     this.publicClient = this.setPublicClient(this.chainId);
   }
 
-  setPublicClient(chainId: number): PublicClient {
-    return createPublicClient({
-      chain: Object.values(availableChains).find(
-        (chain) => chain.id === chainId
-      )!,
-      transport: http(),
-    });
+  setPublicClient(chainId: number): PublicClient | undefined {
+    const targetChain = Object.values(availableChains).find(
+      (chain) => chain.id === chainId
+    );
+    return targetChain
+      ? createPublicClient({
+          chain: Object.values(availableChains).find(
+            (chain) => chain.id === chainId
+          )!,
+          transport: http(),
+        })
+      : undefined;
   }
 
   async connect(): Promise<void> {
@@ -59,7 +64,8 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
     );
 
     if (!chainObj) {
-      throw new Error(`ChainId ${chainId} is not supported.`);
+      console.error(`ChainId ${chainId} is not supported.`);
+      return;
     }
 
     return chainObj[0] as ChainName;
@@ -67,7 +73,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
 
   private getChainByChainId(id: number) {
     const chainKey = this.getChainKeyByChainId(id);
-    return this.cyberApp.cyberWallet?.[chainKey];
+    return chainKey ? this.cyberApp.cyberWallet?.[chainKey] : undefined;
   }
 
   async request(request: { method: string; params?: any }): Promise<any> {
@@ -111,7 +117,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
       }
 
       default:
-        return await this.publicClient.request({
+        return await this.publicClient?.request({
           method: method as any,
           params: params as any,
         });
