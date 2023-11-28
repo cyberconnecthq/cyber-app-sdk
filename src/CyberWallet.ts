@@ -34,6 +34,8 @@ class CyberWallet {
   public opBnb: Chain;
   public opBnbTestnet: Chain;
   public scrollSepolia: Chain;
+  public scroll: Chain;
+  public mainnet: Chain;
 
   constructor({ contextWindow, appInfo }: CyberWalletParams) {
     this.contextWindow = contextWindow;
@@ -70,7 +72,7 @@ class CyberWallet {
   private resolveActionResponse(
     message: WalletMessage,
     reject: any,
-    resolve: any,
+    resolve: any
   ) {
     if (message.target === "CyberApp") {
       if (message.event.name === "action") {
@@ -81,7 +83,7 @@ class CyberWallet {
                 name: ErrorType.SendTransactionError,
                 details: message.event.data.error,
                 shortMessage: "Transaction failed",
-              }),
+              })
             );
           } else {
             reject(new EventError({ details: message.event.data.error }));
@@ -104,6 +106,25 @@ class CyberWallet {
             ...transaction,
             from: transaction.from || this.cyberAccount?.address,
           },
+        },
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      this.messenger.onMessage((message) => {
+        this.resolveActionResponse(message, reject, resolve);
+      });
+    });
+  }
+
+  public signMessage(message: string) {
+    this.messenger.sendMessage({
+      name: "action",
+      data: {
+        type: EventType.Request,
+        method: "signMessage",
+        data: {
+          message,
         },
       },
     });
