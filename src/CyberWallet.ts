@@ -6,6 +6,7 @@ import Chain from "./Chain";
 import { availableChains } from "./config/chains";
 import { type AppInfo, ErrorType } from "./types";
 import EventError from "./EventError";
+import { type SignTypedDataParameters } from "viem";
 
 type CyberWalletParams = {
   contextWindow: Window;
@@ -125,6 +126,25 @@ class CyberWallet {
         method: "signMessage",
         data: {
           message,
+        },
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      this.messenger.onMessage((message) => {
+        this.resolveActionResponse(message, reject, resolve);
+      });
+    });
+  }
+
+  public signTypedData(typedData: SignTypedDataParameters) {
+    this.messenger.sendMessage({
+      name: "action",
+      data: {
+        type: EventType.Request,
+        method: "signTypedData",
+        data: {
+          typedData,
         },
       },
     });

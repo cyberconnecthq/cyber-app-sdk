@@ -92,6 +92,24 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
       case "personal_sign":
         return this.cyberApp.cyberWallet?.signMessage(hexToString(params[0]));
 
+      case "eth_signTypedData":
+      case "eth_signTypedData_v4": {
+        const [address, typedData] = params;
+        const parsedTypedData =
+          typeof typedData === "string" ? JSON.parse(typedData) : typedData;
+
+        if (
+          this.cyberApp.cyberWallet.cyberAccount?.address.toLowerCase() !==
+          address.toLowerCase()
+        ) {
+          throw new Error("The address is invalid");
+        }
+        const signature =
+          await this.cyberApp.cyberWallet.signTypedData(parsedTypedData);
+
+        return signature || "0x";
+      }
+
       case "eth_chainId":
         return `0x${this.chainId.toString(16)}`;
 
