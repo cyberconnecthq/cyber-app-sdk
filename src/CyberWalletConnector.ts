@@ -6,7 +6,6 @@ import {
   SwitchChainError,
   numberToHex,
   custom,
-  WalletClient,
   ProviderRpcError,
   ResourceUnavailableRpcError,
   UserRejectedRequestError,
@@ -20,6 +19,7 @@ import {
   ChainNotConfiguredForConnectorError,
 } from "@wagmi/connectors";
 import { availableChains } from "./config/chains";
+import { type WalletClient } from "wagmi";
 
 type CyberWalletConnectorOptions = {
   name?: string;
@@ -35,7 +35,7 @@ class CyberWalletConnector extends Connector<
   provider?: CyberProvider;
   readonly id = "cyberwallet";
   readonly name = "CyberWallet";
-  readonly ready: boolean;
+  ready: boolean;
   protected shimDisconnectKey = `${this.id}.shimDisconnect`;
 
   constructor({
@@ -59,7 +59,7 @@ class CyberWalletConnector extends Connector<
     });
     this.id = "cyberwallet";
     this.name = "CyberWallet";
-    this.ready = !!this.getProvider();
+    this.getProvider();
   }
 
   async connect({ chainId }: { chainId?: number } = {}) {
@@ -137,7 +137,7 @@ class CyberWalletConnector extends Connector<
     const isInCyberWallet = isCyberWallet();
 
     if (!isInCyberWallet) {
-      throw Error("Could not load CyberWallet information.");
+      console.error("Could not load CyberWallet information.");
     }
 
     if (!this.provider) {
@@ -158,12 +158,12 @@ class CyberWalletConnector extends Connector<
       });
 
       this.provider = cyberProvider;
+      this.ready = true;
     }
 
     return this.provider;
   }
 
-  //@ts-ignore
   async getWalletClient({
     chainId,
   }: { chainId?: number } = {}): Promise<WalletClient> {
@@ -171,11 +171,13 @@ class CyberWalletConnector extends Connector<
       this.getProvider(),
       this.getAccount(),
     ]);
+
     const chain = this.chains.find((x: Chain) => x.id === chainId);
     if (!provider) throw new Error("provider is required.");
+
     return createWalletClient({
       account,
-      chain,
+      chain: chain!,
       transport: custom(provider),
     });
   }
