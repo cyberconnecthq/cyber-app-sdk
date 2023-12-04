@@ -2,24 +2,23 @@
   "name": "@cyberlab/cyber-app-sdk",
   "version": "0.0.0-development",
   "description": "",
-  "type": "module",
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "files": [
     "dist/*"
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "clean": "rm -rf ./dist",
     "test": "jest",
-    "build": "pnpm run test && pnpm run clean && tsup src/index.ts --dts --format esm,cjs",
+    "build": "pnpm run test && pnpm run clean && tsup src/index.ts --dts --format esm,cjs --clean",
     "prepack": "pnpm run build",
     "semantic-release": "semantic-release"
   },
