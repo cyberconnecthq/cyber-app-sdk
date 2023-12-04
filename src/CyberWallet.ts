@@ -65,6 +65,9 @@ class CyberWallet {
   public setCyberAccount(cyberAccount: CyberAccount | null) {
     this.cyberAccount = cyberAccount;
 
+    localStorage.removeItem("cyber-app-sdk");
+    localStorage.setItem("cyber-app-sdk", JSON.stringify(cyberAccount));
+
     Object.keys(availableChains).forEach((key) => {
       this[key as AvailableChainName].setCyberAccount(cyberAccount);
     });

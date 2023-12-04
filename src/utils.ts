@@ -13,3 +13,14 @@ export function isChainUnsupported(chainId: number) {
     .map((chain) => chain.id)
     .includes(chainId);
 }
+
+export function getSignerAddress() {
+  const storage = localStorage.getItem("cyber-app-sdk");
+
+  if (!storage) {
+    return null;
+  }
+
+  const cyberAccountData = JSON.parse(storage);
+  return cyberAccountData.ownerAddress;
+}
