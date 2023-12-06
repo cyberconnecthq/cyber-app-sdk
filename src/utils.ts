@@ -3,6 +3,7 @@ import { availableChains } from "./config/chains";
 export const isCyberWallet = () =>
   typeof document !== "undefined" &&
   [
+    "https://next.wallet.cyber.co/",
     "https://wallet-sandbox.cyber.co/",
     "https://wallet.cyber.co/",
     "https://cyberwallet-sandbox-cyberconnect.vercel.app/",
