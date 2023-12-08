@@ -81,9 +81,10 @@ const chainNames = [
   "base",
   "baseGoerli",
   "opBnb",
-  "opBnbTestnet",
   "scrollSepolia",
   "scroll",
+  "bsc",
+  "bscTestnet",
 ] as const;
 
 export type ChainName = (typeof chainNames)[number];
@@ -100,8 +101,9 @@ export const availableChains: Record<ChainName, Chain> = {
   base,
   baseGoerli,
   opBnb: opBnbMainnet,
-  opBnbTestnet,
   scrollSepolia,
   scroll,
   mainnet,
+  bscTestnet,
+  bsc,
 } as const;
