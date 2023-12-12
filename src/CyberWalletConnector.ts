@@ -204,17 +204,11 @@ class CyberWalletConnector extends Connector<
     const id = numberToHex(chainId);
 
     try {
-      await Promise.all([
-        provider.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: id }],
-        }),
-        new Promise<void>((res) =>
-          this.on("change", ({ chain }) => {
-            if (chain?.id === chainId) res();
-          })
-        ),
-      ]);
+      await provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: id }],
+      });
+
       return (
         this.chains.find((x: Chain) => x.id === chainId) ?? {
           id: chainId,
