@@ -1,13 +1,16 @@
 import { availableChains } from "./config/chains";
 
-export const isCyberWallet = () =>
-  typeof document !== "undefined" &&
-  [
-    "https://next.wallet.cyber.co/",
-    "https://wallet-sandbox.cyber.co/",
-    "https://wallet.cyber.co/",
-    "https://cyberwallet-sandbox-cyberconnect.vercel.app/",
-  ].includes(document.referrer);
+export const isCyberWallet = () => {
+  console.log("is cyber wallet");
+  return true;
+};
+// typeof document !== "undefined" &&
+// [
+//   "https://next.wallet.cyber.co/",
+//   "https://wallet-sandbox.cyber.co/",
+//   "https://wallet.cyber.co/",
+//   "https://cyberwallet-sandbox-cyberconnect.vercel.app/",
+// ].includes(document.referrer);
 
 export function isChainUnsupported(chainId: number) {
   return !Object.values(availableChains)

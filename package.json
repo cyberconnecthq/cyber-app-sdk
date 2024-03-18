@@ -47,8 +47,9 @@
   },
   "dependencies": {
     "@wagmi/connectors": "^3.1.10",
+    "@wagmi/core": "^2.6.5",
     "ts-node": "^10.9.1",
-    "viem": "^1.19.11",
-    "wagmi": "^1.4.12"
+    "viem": "^2.8.9",
+    "wagmi": "^2.5.7"
   }
 }

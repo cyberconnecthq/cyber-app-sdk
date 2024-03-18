@@ -15,6 +15,7 @@ import {
   bscTestnet,
   scrollSepolia,
   scroll,
+  optimismSepolia,
 } from "viem/chains";
 
 export const opBnbMainnet = {
@@ -85,6 +86,7 @@ const chainNames = [
   "scroll",
   "bsc",
   "bscTestnet",
+  "optimismSepolia",
 ] as const;
 
 export type ChainName = (typeof chainNames)[number];
@@ -106,4 +108,5 @@ export const availableChains: Record<ChainName, Chain> = {
   mainnet,
   bscTestnet,
   bsc,
+  optimismSepolia,
 } as const;
