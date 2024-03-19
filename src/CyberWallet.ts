@@ -176,6 +176,25 @@ class CyberWallet {
       });
     });
   }
+
+  public switchChain(chainId: number) {
+    this.messenger.sendMessage({
+      name: "action",
+      data: {
+        type: EventType.Request,
+        method: "switchChain",
+        data: {
+          chainId,
+        },
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      this.messenger.onMessage((message) => {
+        this.resolveActionResponse(message, reject, resolve);
+      });
+    });
+  }
 }
 
 export default CyberWallet;

@@ -84,6 +84,7 @@ class CyberProvider extends EventEmitter implements EIP1193Provider {
         this.chainId = Number(params[0].chainId as Hex);
         this.chain = this.getChainByChainId(this.chainId);
         this.publicClient = this.setPublicClient(this.chainId);
+        await this.cyberApp.cyberWallet.switchChain(this.chainId);
         // https://eips.ethereum.org/EIPS/eip-1193#chainchanged-1
         this.emit("chainChanged", params[0].chainId);
         return;

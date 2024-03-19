@@ -1,9 +1,14 @@
 import CyberProvider from "./CyberProvider";
 import CyberApp from "./CyberApp";
-import { getAddress } from "viem";
+import {
+  getAddress,
+  RpcError,
+  SwitchChainError,
+  numberToHex,
+  ClientChainNotConfiguredError,
+} from "viem";
 import { isCyberWallet } from "./utils";
 import { ConnectorNotFoundError, normalizeChainId } from "@wagmi/connectors";
-import { availableChains } from "./config/chains";
 import { createConnector, ProviderNotFoundError } from "@wagmi/core";
 
 type CyberWalletConnectorParameters = {
@@ -26,37 +31,7 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
     icon: icon || "",
   });
 
-  // const chainIds = chains?.map((chain) => chain.id);
-  // const chains = Object.values(availableChains).filter(
-  //   (chain) => chainIds?.includes(chain.id),
-  // );
-  //
-  // const onAccountsChanged = (accounts: string[]) => {
-  //   if (accounts.length === 0) this.emit("disconnect");
-  //   else
-  //     this.emit("change", {
-  //       account: getAddress(accounts[0] as string),
-  //     });
-  // };
-  //
-  // const isChainUnsupported = (chainId: number) => {
-  //   return !Object.values(availableChains)
-  //     .map((chain) => chain.id)
-  //     .includes(chainId);
-  // };
-  //
-  // const onChainChanged = (chainId: number | string) => {
-  //   const id = normalizeChainId(chainId);
-  //   const unsupported = this.isChainUnsupported(id);
-  //   this.emit("change", { chain: { id, unsupported } });
-  // };
-  //
-  // const onDisconnect = () => {
-  //   this.emit("disconnect");
-  // };
-  // const isUserRejectedRequestError = (error: unknown) => {
-  //   return (error as ProviderRpcError).code === 4001;
-  // };
+  let provider_: Provider;
 
   return createConnector<Provider, Properties, StorageItem>((config) => {
     return {
@@ -71,6 +46,7 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
         const chainId = await this.getChainId();
 
         provider.on("disconnect", this.onDisconnect.bind(this));
+        provider.on("chainChanged", this.onChainChanged);
 
         // Remove disconnected shim if it exists
         if (shimDisconnect)
@@ -102,6 +78,8 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
       },
 
       getProvider: async () => {
+        if (provider_) return provider_;
+
         const isInCyberWallet = isCyberWallet();
 
         if (!isInCyberWallet) {
@@ -118,7 +96,9 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
           chainId: config.chains[0].id, // default chain ID
         });
 
-        return cyberProvider;
+        provider_ = cyberProvider;
+
+        return provider_;
       },
       async isAuthorized() {
         try {
@@ -143,6 +123,26 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
       },
       onDisconnect() {
         config.emitter.emit("disconnect");
+      },
+      async switchChain({ chainId }) {
+        const provider = await this.getProvider();
+        if (!provider) throw new ProviderNotFoundError();
+
+        const chain = config.chains.find((x) => x.id === chainId);
+        if (!chain)
+          throw new SwitchChainError(new ClientChainNotConfiguredError());
+
+        try {
+          await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: numberToHex(chainId) }],
+          });
+
+          return chain;
+        } catch (err) {
+          const error = err as RpcError;
+          throw new SwitchChainError(error);
+        }
       },
     };
   });
