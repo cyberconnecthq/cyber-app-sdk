@@ -23,7 +23,7 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
 
   type Provider = CyberProvider | undefined;
   type Properties = {};
-  type StorageItem = { "cyberWallet.disconnected": true };
+  type StorageItem = Record<string, boolean>;
 
   const app = new CyberApp({
     appId: appId || "",
@@ -50,7 +50,9 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
 
         // Remove disconnected shim if it exists
         if (shimDisconnect)
-          await config.storage?.removeItem("cyberWallet.disconnected");
+          await config.storage?.removeItem(
+            config.storage?.key + ".disconnected",
+          );
 
         return { accounts, chainId };
       },
@@ -62,7 +64,10 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
 
         // Add shim signalling connector is disconnected
         if (shimDisconnect)
-          await config.storage?.setItem("cyberWallet.disconnected", true);
+          await config.storage?.setItem(
+            config?.storage.key + ".disconnected",
+            true,
+          );
       },
       async getAccounts() {
         const provider = await this.getProvider();
@@ -105,7 +110,9 @@ function cyberWalletConnector(parameters: CyberWalletConnectorParameters) {
           const isDisconnected =
             shimDisconnect &&
             // If shim exists in storage, connector is disconnected
-            (await config.storage?.getItem("cyberWallet.disconnected"));
+            (await config.storage?.getItem(
+              config.storage?.key + ".disconnected",
+            ));
           if (isDisconnected) return false;
 
           const accounts = await this.getAccounts();
