@@ -10,6 +10,7 @@ export const isCyberWallet = () =>
     'https://link3.to/',
     'https://stg.link3.to/',
     'https://next.link3.to/',
+    'https://element.link3.to/'
   ].includes(document.referrer)
 
 export function isChainUnsupported(chainId: number) {
