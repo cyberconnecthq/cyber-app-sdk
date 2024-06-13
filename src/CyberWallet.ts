@@ -38,6 +38,8 @@ class CyberWallet {
   public mainnet: Chain;
   public bsc: Chain;
   public bscTestnet: Chain;
+  public cyber: Chain;
+  public cyberTestnet: Chain;
 
   constructor({ contextWindow, appInfo }: CyberWalletParams) {
     this.contextWindow = contextWindow;
