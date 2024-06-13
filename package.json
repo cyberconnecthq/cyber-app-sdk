@@ -1,6 +1,6 @@
 {
   "name": "@cyberlab/cyber-app-sdk",
-  "version": "3.0.0-beta.5",
+  "version": "3.0.0-beta.6",
   "description": "Create a CyberWallet app easily with CyberApp SDK.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
